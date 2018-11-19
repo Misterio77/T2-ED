@@ -27,13 +27,9 @@ abb *criar_arvore() {
 }
 
 //funcao insere um item.
-void inserir_abb(abb *A, item prod) {
+void inserir_abb(abb *A, int num) {
 	if (A != NULL) {
-		if (arvore_vazia(A)) {
-			A->raiz = criar_no();
-			inserir_item(A->raiz, prod);
-		}
-		else inserir_no(A->raiz, prod);
+		inserir_no(A->raiz, num);
 	}
 	return;
 }
@@ -65,4 +61,3 @@ void remove_arvore(abb *A) {
 	}
 	return;
 }
-	
