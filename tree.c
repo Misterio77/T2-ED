@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "estruturas.h"
-#include "funcoes.h"
+#include "node.h"
+#include "tree.h"
 
 struct _abb {
 	no *raiz;
@@ -16,7 +16,7 @@ int arvore_vazia(abb *A) {
 	return 0;
 }
 
-int busca_abb(ABB *A, int item) {
+int busca_abb(abb *A, int item) {
 	if(A != NULL){
 		if(busca_no(A->raiz, item) != NULL) return(1);
 		return(0);
@@ -43,16 +43,22 @@ void inserir_abb(abb *A, int num) {
 }
 
 //remove um item.
-void remove_item(abb *A, int item) {
+void remover_item(abb *A, int item) {
 	if (A != NULL) remover_no(A->raiz, item);
 	return;
 }
 
 //limpa e remove a arvore
-void remove_arvore(abb *A) {
+void remover_arvore(abb *A) {
 	if (A != NULL) { 
 		limpar_no(A->raiz); 
 		free(A);
 	}
+	return;
+}
+
+//imprime itens de uma arvore
+void imprimir_abb(abb *A) {
+	if (A != NULL) imprimir_no(A->raiz); 
 	return;
 }

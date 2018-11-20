@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "estruturas.h"
+#include "tree.h"
 
 
 struct _no {
@@ -187,6 +187,17 @@ void limpar_no(no *raiz) {
 		limpar_no(raiz->esq);
 		limpar_no(raiz->dir);
 		free(raiz);
+	}
+	return;
+}
+
+//percorre e imprime todos nos de uma arvore
+void imprimir_no(no *raiz, int *cont) {
+	if (raiz != NULL) {
+		(*cont)++;
+		contar_no_aux(raiz->esq, cont);
+		printf("-%d-", raiz->item);
+		contar_no_aux(raiz->dir, cont);
 	}
 	return;
 }

@@ -1,5 +1,5 @@
-#ifndef	estruturas_h
-#define estruturas_h
+#ifndef	node_h
+#define node_h
 
 typedef struct _no no;
 

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "funcoes.h"
+#include "tree.h"
+#include "list.h"
 
 struct _supp { 	//struct de fornecerdor
 	int num; 	//codigo do fornecedor
@@ -21,7 +22,7 @@ struct _prod { //struct de item da loja
 
 struct _shop { //no cabeca da lista da loja
 	int num_item;
-	PROD next;
+	PROD *next;
 }
 
 
@@ -61,15 +62,25 @@ PROD *create_prod () { //cria um produto para loja
 	return(NULL);
 }
 
-void insert_item(SHOP shop, int item) { //insere produto na loja
+void insert_item(SHOP *shop, int item) { //insere produto na loja
 	if(shop != NULL){
 		PROD *aux = create_prod();
 		aux->item = item;
 		aux->next = shop->next;
 		shop->next = aux;
 	}
+	shop->num_item++;
 	return;
 }
+
+void insert_item_sup(LIST *list, int cod, int item) { //busca fornecedor e insere produto
+	SUPP *aux;
+	aux = list->next;
+	while(aux != NULL && aux->num != cod) aux = aux->next;
+	if(aux != NULL)inserir_abb(aux->tree, item);
+	return;
+}
+	
 
 void insert_list(LIST list, SUPP *supp){ //insere fornecedor na lista
 	if(supp != NULL){
@@ -140,7 +151,17 @@ void remove_item(SHOP shop, int item){ //remove um item da loja
 			shop = shop->next;
 			free(aux1);
 		}
+		shop->num_item--;
 	}
+
+	return;
+}
+
+void remove_item_sup(LIST list, int sup_cod, int item){ //busca um fornecedor e remove um item
+	SUPP *aux;
+	aux = list->next;
+	while(aux != NULL && aux->num != sup_cod) aux = aux->next;
+	if(aux != NULL) remove_item(aux->tree, item);
 	return;
 }
 
@@ -202,4 +223,21 @@ SHOP *min_supplier(LIST *list, SHOP *shop){//funcao para encontrar o menor num d
 		}
 	}
 	return(min_sup);
+}
+
+void print_shop(SHOP shop) {
+	PROD *aux;
+	for(aux = shop->next; aux->next != NULL; aux = aux->next) printf("-%d-", aux->item);
+	return;
+}
+
+void print_supplier(LIST list, int num) {
+	SUPP *aux;
+	aux = list->next;
+	while(aux != NULL && aux->num != num) aux = aux->next;
+	if(aux != NULL){
+		printf("\nItens do fornecedor:\n")
+		imprimir_abb(aux->tree);
+	}
+	return;
 }
