@@ -16,6 +16,14 @@ int arvore_vazia(abb *A) {
 	return 0;
 }
 
+int busca_abb(ABB *A, int item) {
+	if(A != NULL){
+		if(busca_no(A->raiz, item) != NULL) return(1);
+		return(0);
+	}
+	return(0);
+}
+
 //funcao cria uma arvore
 abb *criar_arvore() {
 	abb *A;
@@ -32,19 +40,6 @@ void inserir_abb(abb *A, int num) {
 		inserir_no(A->raiz, num);
 	}
 	return;
-}
-
-abb *ler_arquivo(char *arquivo) {
-
-	FILE *arqin = fopen(arquivo, "r"); //Abrir arquivo
-	
-	
-	int n; //Ler número de itens
-	fscanf(arqin, "%d", &n);
-	
-	//work in progress
-	
-	return();
 }
 
 //remove um item.
