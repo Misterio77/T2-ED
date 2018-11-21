@@ -28,9 +28,19 @@ no *busca_no(no *raiz, int chave) {
 }
 
 //funcao que insere um item em um no ainda nao alocado
-no *inserir_no(no *B, int num) {
+//funcao que insere um item em um no ja alocado
+void inserir_item(no *B, int num) {
+	if(B != NULL) {
+		B->item = num;
+		return;
+	}
+	printf("B nao foi alocado corretamente\n");
+	return;
+}
 
-	B = busca_no(B, num);
+//funcao que insere um item em um no ainda nao alocado
+no *inserir_no(no *B, int num) {
+	
 	if(B == NULL) {
 		B = criar_no();
 		if(B != NULL) {
@@ -39,6 +49,8 @@ no *inserir_no(no *B, int num) {
 		}
 		return (NULL);
 	}
+	if(num < (B->item)) B->esq = inserir_no(B->esq, num);
+	if(num > (B->item)) B->dir = inserir_no(B->dir, num);
 	return (B);
 }
 

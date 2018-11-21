@@ -8,18 +8,19 @@ int main() {
 	arquivo = (char*) malloc(sizeof(char)*50);
 	
 	while (i > 0) {
-		printf("\nProblema da Cobertura de Conjuntos");
-		printf("\ndigite a funcao desejada(0-10)\n");
-		printf("1) Ler arquivo de entrada para loja\n");
-		printf("2) Ler arquivo de entrada para fornecedores\n");
-		printf("3) Adicionar novo item a loja\n");
-		printf("4) Adicionar novo item a um fornecedor\n");
-		printf("5) Remover um item da loja\n");
-		printf("6) Remover um item de um fornecedor\n");
-		printf("7) Imprimir itens da loja\n");
-		printf("8) Imprimir itens de um fornecedor\n");
-		printf("9) Buscar conjunto minimo de fornecedores\n");
-		printf("\n 0)sair \n>");
+		printf("\n====================================");
+		printf("\nProblema da Cobertura de Conjuntos.\n");
+		printf("\nDigite a funcao desejada(0-10):\n");
+		printf("1) Ler arquivo de entrada para loja.\n");
+		printf("2) Ler arquivo de entrada para fornecedores.\n");
+		printf("3) Adicionar novo item a loja.\n");
+		printf("4) Adicionar novo item a um fornecedor.\n");
+		printf("5) Remover um item da loja.\n");
+		printf("6) Remover um item de um fornecedor.\n");
+		printf("7) Imprimir itens da loja.\n");
+		printf("8) Imprimir itens de um fornecedor.\n");
+		printf("9) Buscar conjunto minimo de fornecedores.\n");
+		printf("\n 0)sair. \n>");
 		scanf("%d", &i);
 		
 		switch (i) {

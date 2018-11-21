@@ -176,34 +176,48 @@ void set_zero(LIST *list) { //muda todos cont diferentes de -1 para zero;
 	return;
 }
 
+int empty_arr(int *arr, int n) {
+	for(int i = 0; i < n; i++)
+		if(arr[i] != 0) return(0);
+	return(1);
+}
+
 void max_inter(LIST *list, int *arr, int n){//funcao recursiva para encontrar o menor num de fornecedores com a maior intersec
+	if(empty_arr(arr, n)) return;
 	int cont = 0;
 	SUPP *s; 	//armazena um fornecedor variavel
 	SUPP *max;	//armazena o fornecedor com a maior interseccao
 	s = list->next;
 	for(int i = 0; i < n; i++){		//arr contem todos itens da loja
 		if(arr[i] != 0){			//se o valor do item for zero, ja possui um fornecedor estabelecido
-			while(s->next != NULL){
-				if(s->cont != (-1))	//se o contador do fornecedor for negativo, ja foi utilizado
-					if(busca_abb(s->tree, arr[i]))//verifica se o fornecedor possui o item
+			while(s != NULL){
+				if(s->cont != (-1)) {	//se o contador do fornecedor for negativo, ja foi utilizado
+					if(busca_abb(s->tree, arr[i])){//verifica se o fornecedor possui o item
 						s->cont++;
+					}
+				}
 				s = s->next;
 			}
 		}
 	}
 	s = list->next;
 	while(s->next != NULL){	//percorre todos fornecedores nao utilizados
-		if(s->cont != (-1))
-			if(s->cont > cont)
+		if(s->cont != (-1)) {
+			if(s->cont > cont) {
 				max = s;	// guarda ponteiro para fornecedor com maior interseccao
+			}
+		}
 		s = s->next;
 	}
 	max->cont = -1;			//marcador negativo para simbolizar que ja foi utilizado
-	for(int i = 0; i < n; i++)
-		if(busca_abb(max->tree, arr[i]))
+	for(int i = 0; i < n; i++){
+		if(busca_abb(max->tree, arr[i])){
 			arr[i] = 0;		//muda os valores dos itens da interseccao para zero
+		}
+	}
 	set_zero(list);			//muda todos marcadores nao negativos para zero
 	max_inter(list, arr, n);
+	return;
 }
 
 SHOP *min_supplier(LIST *list, SHOP *shop){//funcao para encontrar o menor num de fornecedores que contem todos produtos da loja
@@ -212,7 +226,7 @@ SHOP *min_supplier(LIST *list, SHOP *shop){//funcao para encontrar o menor num d
 	SUPP *s;
 	p = shop->next;
 	aux = (int*) malloc((shop->num_item)*sizeof(int));	//cria vetor para guardar itens da loja
-	for(int i = 0; p->next != NULL; i++){
+	for(int i = 0; p != NULL; i++){
 		aux[i] = p->item;								//passa itens da lista da loja para o vetor
 		p = p->next;
 	}	
@@ -238,7 +252,6 @@ void print_supplier(LIST *list, int num) {
 	aux = list->next;
 	while(aux != NULL && aux->num != num) aux = aux->next;
 	if(aux != NULL){
-		printf("\nItens do fornecedor:\n");
 		imprimir_abb(aux->tree);
 	}
 	return;

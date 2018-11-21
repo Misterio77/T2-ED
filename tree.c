@@ -28,15 +28,22 @@ int busca_abb(abb *A, int item) {
 abb *criar_arvore() {
 	abb *A;
 	A = (abb*)malloc(sizeof(abb));
-	if (A == NULL) return(NULL);
+	if (A == NULL) {
+		printf("\narvore nao alocada");
+		return(NULL);
+		}
 	A->raiz = NULL;
 	return (A);
 }
 
 //funcao insere um item.
-void inserir_abb(abb *A, int num) {
+void inserir_abb(abb *A, int item) {
 	if (A != NULL) {
-		inserir_no(A->raiz, num);
+		if (arvore_vazia(A)) {
+			A->raiz = criar_no();
+			inserir_item(A->raiz, item);
+		}
+		else inserir_no(A->raiz, item);
 	}
 	return;
 }
@@ -58,6 +65,6 @@ void remover_arvore(abb *A) {
 
 //imprime itens de uma arvore
 void imprimir_abb(abb *A) {
-	if (A != NULL) imprimir_no(A->raiz); 
+	if (A != NULL) imprimir_no(A->raiz);
 	return;
 }
