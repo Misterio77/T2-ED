@@ -191,12 +191,11 @@ void limpar_no(no *raiz) {
 }
 
 //percorre e imprime todos nos de uma arvore
-void imprimir_no(no *raiz, int *cont) {
+void imprimir_no(no *raiz) {
 	if (raiz != NULL) {
-		(*cont)++;
-		contar_no_aux(raiz->esq, cont);
+		imprimir_no(raiz->esq);
 		printf("-%d-", raiz->item);
-		contar_no_aux(raiz->dir, cont);
+		imprimir_no(raiz->dir);
 	}
 	return;
 }
