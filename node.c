@@ -15,7 +15,6 @@ no *criar_no() {
 	if(B == NULL) return (NULL);
 	B->esq = NULL;
 	B->dir = NULL;
-	printf("no foi alocado\n");
 	return (B);
 }
 

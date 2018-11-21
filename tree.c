@@ -29,7 +29,6 @@ abb *criar_arvore() {
 	abb *A;
 	A = (abb*)malloc(sizeof(abb));
 	if (A == NULL) return(NULL);
-	printf("arvore foi alocada\n");
 	A->raiz = NULL;
 	return (A);
 }

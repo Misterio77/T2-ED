@@ -6,24 +6,24 @@
 struct _supp { 	//struct de fornecerdor
 	int num; 	//codigo do fornecedor
 	int cont;	//contador de interseccao
-	ABB *tree;	//itens do fornecedor em uma ABB
-	struct _supp next;
-}
+	abb *tree;	//itens do fornecedor em uma ABB
+	struct _supp *next;
+};
 
 struct _list { //no cabeca da lista de fornecedores
-	SUPP *supp;
+	SUPP *next;
 	int item;
-}
+};
 
 struct _prod { //struct de item da loja
 	int item;
 	struct _prod *next;
-}
+};
 
 struct _shop { //no cabeca da lista da loja
 	int num_item;
 	PROD *next;
-}
+};
 
 
 
@@ -31,13 +31,13 @@ LIST *create_list () { //cria lista vazia de fornecedores
 	LIST *l;
 	l = (LIST*) malloc(sizeof(LIST));
 	if(l != NULL){
-		l->supp = NULL;
+		l->next = NULL;
 		return(l);
 	}
 	return(NULL);
 }
 
-SUPP create_supplier () { //cria um fornecedor
+SUPP *create_supplier () { //cria um fornecedor
 	SUPP *s;
 	s = (SUPP*) malloc(sizeof(SUPP));
 	if(s != NULL) return(s);
@@ -82,10 +82,10 @@ void insert_item_sup(LIST *list, int cod, int item) { //busca fornecedor e inser
 }
 	
 
-void insert_list(LIST list, SUPP *supp){ //insere fornecedor na lista
+void insert_list(LIST *list, SUPP *supp){ //insere fornecedor na lista
 	if(supp != NULL){
-		supp->next = list->supp;
-		list->supp = supp;
+		supp->next = list->next;
+		list->next = supp;
 	}
 	return;
 }
@@ -93,7 +93,7 @@ void insert_list(LIST list, SUPP *supp){ //insere fornecedor na lista
 LIST *read_file_sup(char *file) { 		//le arquivo de entrada para fornecedores e cria lista
 
 	FILE *file_in = fopen(file, "r"); 	//Abrir arquivo
-	SUPP supp;
+	SUPP *supp;
 	int n, m, item;
 	LIST *l = create_list(); 			//cria lista de fornecedores
 	fscanf(file_in, "%d", &n);
@@ -128,27 +128,27 @@ SHOP *read_file_shop(char *file) { 		//le arquivo de entrada para loja e guarda 
 
 SUPP *search_supp(LIST *list, int num){//busca um forncedor na lista
 	if(list != NULL){
-		SUPP *aux = list->supp;
+		SUPP *aux = list->next;
 		while(aux->num != num && aux != NULL)aux = aux->next;
 		return(aux);
 	}
 	return(NULL);
 }
 
-void remove_item(SHOP shop, int item){ //remove um item da loja
+void remove_item(SHOP *shop, int item){ //remove um item da loja
 	if(shop != NULL){
 		PROD *aux1, *aux2;
 		aux1 = shop->next;
 		aux2 = shop->next;
 		while(aux1->item != item && aux1 != NULL) {
-			aux2 = aux1
+			aux2 = aux1;
 			aux1 = aux1->next;
 		}
 		if(aux1 != aux2){ //se nao for o primeiro item
 			aux2->next = aux1->next;
 			free(aux1);
 		}else {
-			shop = shop->next;
+			shop->next = aux1->next;
 			free(aux1);
 		}
 		shop->num_item--;
@@ -157,24 +157,26 @@ void remove_item(SHOP shop, int item){ //remove um item da loja
 	return;
 }
 
-void remove_item_sup(LIST list, int sup_cod, int item){ //busca um fornecedor e remove um item
+void remove_item_sup(LIST *list, int sup_cod, int item){ //busca um fornecedor e remove um item
 	SUPP *aux;
 	aux = list->next;
 	while(aux != NULL && aux->num != sup_cod) aux = aux->next;
-	if(aux != NULL) remove_item(aux->tree, item);
+	if(aux != NULL) remover_item(aux->tree, item);
 	return;
 }
 
 void set_zero(LIST *list) { //muda todos cont diferentes de -1 para zero;
 	SUPP *aux;
 	aux = list->next;
-	while(list->next != NULL)
-		if(list->cont != (-1))
-			list->cont = 0;
+	while(aux != NULL){
+		if(aux->cont != (-1))
+			aux->cont = 0;
+		aux = aux->next;
+	}
 	return;
 }
 
-void max_inter(LIST list, int *arr, int n){//funcao recursiva para encontrar o menor num de fornecedores com a maior intersec
+void max_inter(LIST *list, int *arr, int n){//funcao recursiva para encontrar o menor num de fornecedores com a maior intersec
 	int cont = 0;
 	SUPP *s; 	//armazena um fornecedor variavel
 	SUPP *max;	//armazena o fornecedor com a maior interseccao
@@ -207,36 +209,36 @@ void max_inter(LIST list, int *arr, int n){//funcao recursiva para encontrar o m
 SHOP *min_supplier(LIST *list, SHOP *shop){//funcao para encontrar o menor num de fornecedores que contem todos produtos da loja
 	int *aux;
 	PROD *p;
+	SUPP *s;
 	p = shop->next;
 	aux = (int*) malloc((shop->num_item)*sizeof(int));	//cria vetor para guardar itens da loja
 	for(int i = 0; p->next != NULL; i++){
 		aux[i] = p->item;								//passa itens da lista da loja para o vetor
 		p = p->next;
 	}	
-	max_inter(list, aux);								//chama a funcao da intersec
+	max_inter(list, aux, shop->num_item);								//chama a funcao da intersec
 	SHOP *min_sup;
 	min_sup = create_shop();							//cria uma outra lista de produtos, porem guarda o nome dos fornecedores
-	p = shop->next;
-	for(int i = 0; p->next != NULL; i++){
-		if(p->cont == -1){
-			insert_item(min_sup, p->item);				//adiciona todos fornecedores marcados na lista
+	for(s = list->next; s != NULL; s = s->next){
+		if(s->cont == -1){
+			insert_item(min_sup, s->num);				//adiciona todos fornecedores marcados na lista
 		}
 	}
 	return(min_sup);
 }
 
-void print_shop(SHOP shop) {
+void print_shop(SHOP *shop) {
 	PROD *aux;
 	for(aux = shop->next; aux->next != NULL; aux = aux->next) printf("-%d-", aux->item);
 	return;
 }
 
-void print_supplier(LIST list, int num) {
+void print_supplier(LIST *list, int num) {
 	SUPP *aux;
 	aux = list->next;
 	while(aux != NULL && aux->num != num) aux = aux->next;
 	if(aux != NULL){
-		printf("\nItens do fornecedor:\n")
+		printf("\nItens do fornecedor:\n");
 		imprimir_abb(aux->tree);
 	}
 	return;
